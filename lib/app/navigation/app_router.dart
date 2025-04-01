@@ -41,6 +41,7 @@ import 'package:employeemanagment/features/admin/screens/create_user_screen.dart
 import 'package:employeemanagment/features/admin/screens/edit_user_screen.dart';
 import 'package:employeemanagment/features/admin/screens/admin_dashboard_screen.dart';
 import 'package:employeemanagment/features/admin/screens/settings_screen.dart';
+import 'package:employeemanagment/features/admin/screens/user_approval_screen.dart';
 // --- End Screen Imports ---
 
 
@@ -156,6 +157,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
        GoRoute( path: AppRoutes.userManagement, builder: (context, state) => const UserManagementScreen()),
        GoRoute( path: AppRoutes.settings, builder: (context, state) => const SettingsScreen()),
        GoRoute( path: AppRoutes.createUser, builder: (context, state) => const CreateUserScreen()),
+       // Add the user approval route
+       GoRoute( path: '/admin/users/approval', builder: (context, state) => const UserApprovalScreen()),
        GoRoute(
           path: '${AppRoutes.editUser}/:userId',
           builder: (context, state) {
