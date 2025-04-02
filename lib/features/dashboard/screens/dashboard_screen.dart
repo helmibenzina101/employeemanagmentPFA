@@ -124,10 +124,21 @@ class DashboardScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               children: [
-                // Welcome message
-                Text('Bonjour, ${user.prenom}!', style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600)),
+                // Adjust text color for better contrast
+                Text(
+                  'Bonjour, ${user.prenom}!',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onBackground, // Use contrasting color
+                  ),
+                ),
                 const SizedBox(height: 8),
-                Text('Bienvenue sur votre tableau de bord.', style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.secondary)),
+                Text(
+                  'Bienvenue sur votre tableau de bord.',
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onBackground, // Use contrasting color
+                  ),
+                ),
                 const SizedBox(height: 24),
 
                 // Quick Actions Grid
@@ -144,13 +155,13 @@ class DashboardScreen extends ConsumerWidget {
                      _buildDashboardCard(context, theme: theme, icon: Icons.campaign_outlined, label: 'Annonces', onTap: () => context.go(AppRoutes.announcements)),
                      // Conditional Admin/HR Cards
                       if (user.role == UserRole.rh || user.role == UserRole.admin)
-                       _buildDashboardCard(context, theme: theme, icon: Icons.check_circle_outline, label: 'Approb. Congés', color: Colors.orange.shade100, onTap: () => context.push(AppRoutes.leaveApproval)),
+                       _buildDashboardCard(context, theme: theme, icon: Icons.check_circle_outline, label: 'Approb. Congés', color: const Color.fromARGB(255, 0, 0, 0), onTap: () => context.push(AppRoutes.leaveApproval)),
                      if (user.role == UserRole.admin) // Only Admin for user management in this setup
-                       _buildDashboardCard(context, theme: theme, icon: Icons.group_add_outlined, label: 'Gestion Utilisateurs', color: Colors.blue.shade100, onTap: () => context.push(AppRoutes.userManagement)),
+                       _buildDashboardCard(context, theme: theme, icon: Icons.group_add_outlined, label: 'Gestion Utilisateurs', color: const Color.fromARGB(255, 0, 0, 0), onTap: () => context.push(AppRoutes.userManagement)),
                      if (user.role == UserRole.rh || user.role == UserRole.admin)
-                        _buildDashboardCard(context, theme: theme, icon: Icons.pending_actions_outlined, label: 'Approb. Comptes', color: Colors.purple.shade100, onTap: () => context.push(AppRoutes.userApproval)), // Link to user approval
+                        _buildDashboardCard(context, theme: theme, icon: Icons.pending_actions_outlined, label: 'Approb. Comptes', color: const Color.fromARGB(255, 2, 2, 2), onTap: () => context.push(AppRoutes.userApproval)), // Link to user approval
                      if (user.role == UserRole.rh || user.role == UserRole.admin)
-                       _buildDashboardCard(context, theme: theme, icon: Icons.bar_chart_outlined, label: 'Rapports', color: Colors.green.shade100, onTap: () => context.push(AppRoutes.absenceReport)),
+                       _buildDashboardCard(context, theme: theme, icon: Icons.bar_chart_outlined, label: 'Rapports', color: const Color.fromARGB(255, 0, 0, 0), onTap: () => context.push(AppRoutes.absenceReport)),
                    ],
                  ),
 

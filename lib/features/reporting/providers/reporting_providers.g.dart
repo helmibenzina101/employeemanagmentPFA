@@ -6,7 +6,7 @@ part of 'reporting_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$absenceReportHash() => r'03e4e1dfe75ba070626a0e1525766c3985986dd7';
+String _$absenceReportHash() => r'6e5ac675863ec66db2ad741528d3a38e17ad6986';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,16 +29,32 @@ class _SystemHash {
   }
 }
 
-/// See also [absenceReport].
+/// Provider to generate absence report data for a given date range.
+/// WARNING: Fetches ALL users and ALL their leave requests. Inefficient for large scale.
+/// Consider server-side aggregation (e.g., Cloud Functions) for production.
+///
+/// Copied from [absenceReport].
 @ProviderFor(absenceReport)
 const absenceReportProvider = AbsenceReportFamily();
 
-/// See also [absenceReport].
+/// Provider to generate absence report data for a given date range.
+/// WARNING: Fetches ALL users and ALL their leave requests. Inefficient for large scale.
+/// Consider server-side aggregation (e.g., Cloud Functions) for production.
+///
+/// Copied from [absenceReport].
 class AbsenceReportFamily extends Family<AsyncValue<AbsenceReportData>> {
-  /// See also [absenceReport].
+  /// Provider to generate absence report data for a given date range.
+  /// WARNING: Fetches ALL users and ALL their leave requests. Inefficient for large scale.
+  /// Consider server-side aggregation (e.g., Cloud Functions) for production.
+  ///
+  /// Copied from [absenceReport].
   const AbsenceReportFamily();
 
-  /// See also [absenceReport].
+  /// Provider to generate absence report data for a given date range.
+  /// WARNING: Fetches ALL users and ALL their leave requests. Inefficient for large scale.
+  /// Consider server-side aggregation (e.g., Cloud Functions) for production.
+  ///
+  /// Copied from [absenceReport].
   AbsenceReportProvider call(
     DateTime startDate,
     DateTime endDate,
@@ -74,10 +90,18 @@ class AbsenceReportFamily extends Family<AsyncValue<AbsenceReportData>> {
   String? get name => r'absenceReportProvider';
 }
 
-/// See also [absenceReport].
+/// Provider to generate absence report data for a given date range.
+/// WARNING: Fetches ALL users and ALL their leave requests. Inefficient for large scale.
+/// Consider server-side aggregation (e.g., Cloud Functions) for production.
+///
+/// Copied from [absenceReport].
 class AbsenceReportProvider
     extends AutoDisposeFutureProvider<AbsenceReportData> {
-  /// See also [absenceReport].
+  /// Provider to generate absence report data for a given date range.
+  /// WARNING: Fetches ALL users and ALL their leave requests. Inefficient for large scale.
+  /// Consider server-side aggregation (e.g., Cloud Functions) for production.
+  ///
+  /// Copied from [absenceReport].
   AbsenceReportProvider(
     DateTime startDate,
     DateTime endDate,

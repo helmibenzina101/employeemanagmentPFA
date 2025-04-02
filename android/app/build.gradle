@@ -1,44 +1,99 @@
+// Apply necessary plugins AT THE TOP
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // Apply the Google services plugin - MUST BE AFTER 'com.android.application'
+    id "com.google.gms.google-services"
+    // Keep the Flutter embedding plugin
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
 android {
-    namespace = "com.example.employeemanagment"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // Set namespace (usually matches your package name from flutter create)
+    namespace "com.example.employeemanagment" // <<< CHANGE THIS if your package name is different
+    // Use compileSdk version matching your target platform or slightly higher
+    compileSdk 34 // Recommended for recent Flutter versions
+    ndkVersion flutter.ndkVersion // Use Flutter's recommended NDK version
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        // Use Java 1.8 compatibility (common requirement for Flutter/Android)
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        // Target JVM 1.8
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.employemanagement"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        applicationId "com.example.employeemanagment" // <<< CHANGE THIS if your package name is different
+        // Set minimum SDK version
+        minSdkVersion 23 // Android 6.0 (adjust if needed, but >= 21 is often required for Firebase)
+        // Set target SDK version
+        targetSdkVersion 34 // Match compileSdk or target recent Android version
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        // Enable multidex (Important for apps with many dependencies like Firebase)
+        multiDexEnabled true
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            // Configure signing for release builds
+            // TODO: Add your release signing configurations here (signingConfigs block)
+            signingConfig signingConfigs.debug // Placeholder, replace with your release config
+            // Enable Proguard/R8 for code shrinking and obfuscation
+            minifyEnabled true // Recommended for release
+            shrinkResources true // Recommended for release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        // Debug build type usually doesn't need specific signing config here (uses default debug key)
     }
 }
 
 flutter {
-    source = "../.."
+    source '../..'
+}
+
+dependencies {
+    // Import the Firebase BoM (Bill of Materials) - manages dependency versions
+    // Use a recent BoM version (check Firebase docs for latest)
+    implementation platform('com.google.firebase:firebase-bom:33.1.1') // Example version
+
+    // Declare Firebase dependencies without versions (managed by BoM)
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+    // Add other Firebase products if needed (e.g., 'firebase-messaging', 'firebase-storage')
+    // implementation 'com.google.firebase:firebase-messaging'
+
+    // Required for multidex support on older Android versions
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Standard Kotlin dependency (version managed by kotlin_version in root build.gradle)
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // Add other Android dependencies if needed by plugins or native code
 }

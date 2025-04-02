@@ -35,26 +35,28 @@ class LeaveRequestModel {
   });
 
   // --- Factory Constructor from Firestore ---
-   factory LeaveRequestModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
-    final data = snapshot.data();
-     if (data == null) throw Exception("Leave request data is null for ID: ${snapshot.id}");
-
-    return LeaveRequestModel(
-      id: snapshot.id,
-      userId: data['userId'] ?? '',
-      userName: data['userName'] ?? 'Utilisateur Inconnu',
-      type: _typeFromString(data['type']),
-      startDate: data['startDate'] ?? Timestamp.now(),
-      endDate: data['endDate'] ?? Timestamp.now(),
-      // Ensure 'days' is parsed correctly as double
-      days: (data['days'] is num) ? (data['days'] as num).toDouble() : 0.0,
-      reason: data['reason'] ?? '',
-      status: _statusFromString(data['status']),
-      approverId: data['approverId'],
-      rejectionReason: data['rejectionReason'],
-       requestedAt: data['requestedAt'] ?? Timestamp.now(),
-    );
-  }
+   // --- Factory Constructor from Firestore ---
+     factory LeaveRequestModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+       final data = snapshot.data();
+       if (data == null) throw Exception("Leave request data is null for ID: ${snapshot.id}");
+   
+       return LeaveRequestModel(
+         id: snapshot.id,
+// NEW Line 44:
+userId: data['userId']?.toString() ?? '',         userName: data['userName'] ?? 'Utilisateur Inconnu',
+         type: _typeFromString(data['type']), // Use the improved method that handles both int and string
+         startDate: data['startDate'] ?? Timestamp.now(),
+         endDate: data['endDate'] ?? Timestamp.now(),
+         // Ensure 'days' is parsed correctly as double
+         days: (data['days'] is int) 
+             ? (data['days'] as int).toDouble() 
+             : ((data['days'] is double) ? (data['days'] as double) : 0.0),
+reason: data['reason']?.toString() ?? '',         status: _statusFromString(data['status']),
+         approverId: data['approverId'],
+         rejectionReason: data['rejectionReason'],
+         requestedAt: data['requestedAt'] ?? Timestamp.now(),
+       );
+     }
 
   // --- Method to convert to Firestore Map ---
   Map<String, dynamic> toFirestore() {
@@ -74,27 +76,43 @@ class LeaveRequestModel {
   }
 
   // --- Private Enum Parsing Helpers ---
-   static LeaveType _typeFromString(String? typeStr) {
-    switch(typeStr?.toLowerCase()) { // Use null-safe access and lowercase
-      case 'paid': return LeaveType.paid;
-      case 'unpaid': return LeaveType.unpaid;
-      case 'sick': return LeaveType.sick;
-      case 'special': return LeaveType.special;
-      default: return LeaveType.paid; // Sensible default
-    }
-  }
+   static LeaveType _typeFromString(dynamic typeValue) {
+     // Handle integer type values
+     if (typeValue is int) {
+       return typeValue >= 0 && typeValue < LeaveType.values.length 
+           ? LeaveType.values[typeValue] 
+           : LeaveType.paid;
+     }
+     
+     // Handle string type values
+     switch(typeValue?.toString().toLowerCase()) {
+       case 'paid': return LeaveType.paid;
+       case 'unpaid': return LeaveType.unpaid;
+       case 'sick': return LeaveType.sick;
+       case 'special': return LeaveType.special;
+       default: return LeaveType.paid; // Sensible default
+     }
+   }
 
    static String _typeToString(LeaveType type) => type.name; // Use built-in enum name
 
-   static LeaveStatus _statusFromString(String? statusStr) {
-    switch(statusStr?.toLowerCase()) { // Use null-safe access and lowercase
-      case 'pending': return LeaveStatus.pending;
-      case 'approved': return LeaveStatus.approved;
-      case 'rejected': return LeaveStatus.rejected;
-      case 'cancelled': return LeaveStatus.cancelled;
-      default: return LeaveStatus.pending; // Sensible default
-    }
-  }
+   static LeaveStatus _statusFromString(dynamic statusValue) {
+     // Handle integer type values
+     if (statusValue is int) {
+       return statusValue >= 0 && statusValue < LeaveStatus.values.length 
+           ? LeaveStatus.values[statusValue] 
+           : LeaveStatus.pending;
+     }
+     
+     // Handle string type values
+     switch(statusValue?.toString().toLowerCase()) {
+       case 'pending': return LeaveStatus.pending;
+       case 'approved': return LeaveStatus.approved;
+       case 'rejected': return LeaveStatus.rejected;
+       case 'cancelled': return LeaveStatus.cancelled;
+       default: return LeaveStatus.pending; // Sensible default
+     }
+   }
 
    static String _statusToString(LeaveStatus status) => status.name; // Use built-in enum name
 
@@ -136,3 +154,5 @@ class LeaveRequestModel {
       }
     }
 }
+
+// Delete the duplicate factory constructor that was added at the bottom of the file

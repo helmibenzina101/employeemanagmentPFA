@@ -61,7 +61,10 @@ class AnnouncementCard extends ConsumerWidget {
                    Expanded(
                     child: Text(
                       announcement.title,
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface, // Use contrasting color
+                      ),
                     ),
                   ),
                   // Delete Button (if authorized)
@@ -116,7 +119,9 @@ class AnnouncementCard extends ConsumerWidget {
               // Content Preview (limit lines shown)
               Text(
                 announcement.content,
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface, // Use contrasting color
+                ),
                 maxLines: 3, // Show only a preview
                 overflow: TextOverflow.ellipsis, // Indicate more content with '...'
               ),
@@ -127,11 +132,13 @@ class AnnouncementCard extends ConsumerWidget {
                  children: [
                     Text(
                       'Par: ${announcement.authorName}',
-                      style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.secondary),
+                      style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.secondary,),
                     ),
                     Text(
                        DateFormatter.formatTimestamp(announcement.createdAt, pattern: 'dd/MM/yy HH:mm'),
-                       style: theme.textTheme.labelSmall,
+                       style: theme.textTheme.labelSmall?.copyWith(
+                         color: theme.colorScheme.onSurface, // Use contrasting color
+                       ),
                     ),
                  ],
                ),

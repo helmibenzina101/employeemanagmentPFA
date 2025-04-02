@@ -109,17 +109,20 @@ class _CreateAnnouncementScreenState extends ConsumerState<CreateAnnouncementScr
                   // Target Roles Selector
                   MultiSelectDialogField<UserRole>(
                      items: _roleItems,
-                     title: const Text("Visible par"),
+                     title: const Text("Visible par", style: TextStyle(color: Colors.white)),
                      selectedColor: theme.primaryColor,
-                     buttonIcon: Icon(Icons.group_outlined, color: theme.colorScheme.secondary),
+                     buttonIcon: Icon(Icons.group_outlined, color: theme.primaryColor),
                      buttonText: Text(
                        "Audience Cible (laisser vide pour tous)",
-                       style: theme.textTheme.bodyLarge?.copyWith(color: theme.hintColor),
+                       style: theme.textTheme.bodyLarge?.copyWith(color: theme.primaryColor),
                      ),
                      chipDisplay: MultiSelectChipDisplay(
-                        chipColor: theme.colorScheme.primaryContainer,
-                        textStyle: TextStyle(color: theme.colorScheme.onPrimaryContainer, fontSize: 12),
-                        icon: Icon(Icons.close, color: theme.colorScheme.onPrimaryContainer, size: 14),
+                        chipColor: theme.primaryColor,
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                        icon: Icon(Icons.close, color: Colors.white, size: 14),
                         onTap: (value) {
                            setState(() {
                               _selectedRoles.remove(value);
@@ -131,12 +134,19 @@ class _CreateAnnouncementScreenState extends ConsumerState<CreateAnnouncementScr
                          _selectedRoles = results;
                        });
                      },
-                      // validator: (value) => value == null || value.isEmpty ? "Sélectionnez au moins un rôle" : null,
-                      initialValue: _selectedRoles, // Pre-select if needed
-                       decoration: BoxDecoration(
-                         border: Border.all(color: theme.dividerColor),
-                         borderRadius: BorderRadius.circular(4),
-                       ),
+                     dialogHeight: 300,
+                     itemsTextStyle: const TextStyle(color: Colors.white),
+                     checkColor: Colors.white,
+                     unselectedColor: Colors.grey,
+                     selectedItemsTextStyle: const TextStyle(color: Colors.white),
+                     // Remove the dialogShape parameter
+                     cancelText: const Text("CANCEL", style: TextStyle(color: Colors.blue)),
+                     confirmText: const Text("OK", style: TextStyle(color: Colors.blue)),
+                     initialValue: _selectedRoles,
+                     decoration: BoxDecoration(
+                       border: Border.all(color: theme.dividerColor),
+                       borderRadius: BorderRadius.circular(4),
+                     ),
                    ),
                   const SizedBox(height: AppConstants.defaultPadding),
 
